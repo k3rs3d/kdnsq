@@ -1,6 +1,6 @@
 # kDNSq - Kersed DNS Query
 
-A simple command-line DNS querying tool built in Rust. It utilizes trust-dns-resolver and tokio to perform asynchronous DNS queries. 
+A simple command-line DNS querying tool built in Rust. It utilizes `trust-dns-resolver` and `tokio` to perform asynchronous DNS queries. 
 
 ## Features
 
@@ -9,6 +9,7 @@ A simple command-line DNS querying tool built in Rust. It utilizes trust-dns-res
 	- AAAA: IPv6 addresses
 	- MX: Mail exchange records
 	- NS: Name server records
+	- TXT: Multi-purpose records
 - Asynchronous resolution using Tokio.
 - Basic error handling.
 
@@ -21,7 +22,7 @@ The basic usage pattern is as follows:
 
 Where:
 
-- `<RECORD_TYPE>` is one of A, AAAA, MX, NS.
+- `<RECORD_TYPE>` is one of A, AAAA, MX, NS, TXT.
 - `<HOSTNAME>` is the domain name to query.
 
 Example:
@@ -37,4 +38,5 @@ To run the project directly from the source without building, use Cargo's run co
 ## Contributions
 
 Contributions are welcome! 
+
 If you have a feature request, bug report, etc, please feel free to submit an issue or open a pull request.
