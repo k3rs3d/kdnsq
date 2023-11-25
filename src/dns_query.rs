@@ -28,13 +28,30 @@ pub async fn perform_dns_query(record_type: String, hostname: String) {
                 .for_each(|record| println!("NS: {:?}", record)),
             Err(err) => handle_resolve_error(&err),
         },
+        "SOA" => match resolver.soa_lookup(hostname).await {
+            Ok(records) => records
+                .iter()
+                .for_each(|record| println!("SOA: {}", record)),
+            Err(err) => handle_resolve_error(&err),
+        },
+        "SRV" => match resolver.srv_lookup(hostname).await {
+            Ok(records) => records
+                .iter()
+                .for_each(|record| println!("SRV: {}", record)),
+            Err(err) => handle_resolve_error(&err),
+        },
+        "TLSA" => match resolver.tlsa_lookup(hostname).await {
+            Ok(records) => records
+                .iter()
+                .for_each(|record| println!("TLSA: {}", record)),
+            Err(err) => handle_resolve_error(&err),
+        },
         "TXT" => match resolver.txt_lookup(hostname).await {
             Ok(records) => records
                 .iter()
                 .for_each(|record| println!("TXT: {}", record)),
             Err(err) => handle_resolve_error(&err),
         },
-        // Add here any additional record types
         _ => {
             eprintln!("Unsupported record type: {}", record_type);
         }

@@ -9,6 +9,9 @@ A simple command-line DNS querying tool built in Rust. It utilizes `hickory-reso
 	- AAAA: IPv6 addresses
 	- MX: Mail exchange records
 	- NS: Name server records
+	- SOA: "Start of authority" records
+	- SRV: Generalized service location records
+	- TLSA: TLS certificate association
 	- TXT: Multi-purpose records
 - Asynchronous resolution using Tokio.
 - Basic error handling.
