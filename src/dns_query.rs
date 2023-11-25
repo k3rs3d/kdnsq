@@ -1,7 +1,7 @@
-use trust_dns_resolver::config::*;
-use trust_dns_resolver::error::ResolveErrorKind;
-use trust_dns_resolver::proto::error::ProtoErrorKind;
-use trust_dns_resolver::TokioAsyncResolver;
+use hickory_resolver::TokioAsyncResolver;
+use hickory_resolver::config::*;
+use hickory_resolver::error::ResolveErrorKind;
+use hickory_proto::error::ProtoErrorKind;
 
 pub async fn perform_dns_query(record_type: String, hostname: String) {
     let resolver = TokioAsyncResolver::tokio(ResolverConfig::default(), ResolverOpts::default());
@@ -12,7 +12,7 @@ pub async fn perform_dns_query(record_type: String, hostname: String) {
             Ok(ips) => ips.iter().for_each(|ip| println!("A: {}", ip)),
             Err(err) => handle_resolve_error(&err),
         },
-        "AAAA" => match resolver.ipv6_lookup(hostname).await {
+        "AAAA" | "IPV6" => match resolver.ipv6_lookup(hostname).await {
             Ok(ips) => ips.iter().for_each(|ip| println!("AAAA: {}", ip)),
             Err(err) => handle_resolve_error(&err),
         },
@@ -41,21 +41,21 @@ pub async fn perform_dns_query(record_type: String, hostname: String) {
     }
 }
 
-fn handle_resolve_error(err: &trust_dns_resolver::error::ResolveError) {
+fn handle_resolve_error(err: &hickory_resolver::error::ResolveError) {
     // Match on the error kind
     match err.kind() {
         ResolveErrorKind::NoRecordsFound { query, .. } => {
             eprintln!("No records found for {:?}", query.name());
         }
         ResolveErrorKind::Io(io_err) => {
-            eprintln!("IO error occurred: {:?}", io_err);
+            eprintln!("IO error: {:?}", io_err);
         }
         ResolveErrorKind::Proto(proto_err) => match proto_err.kind() {
             ProtoErrorKind::Timeout => {
                 eprintln!("DNS query timed out");
             }
             _ => {
-                eprintln!("Protocol error occurred: {:?}", proto_err);
+                eprintln!("Protocol error: {:?}", proto_err);
             }
         },
         _ => {
